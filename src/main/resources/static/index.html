@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>계산기답지 않은 계산기</title>
+    <script src="http://code.jquery.com/jquery-3.3.1.js"
+            integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+            crossorigin="anonymous">
+    </script>
+</head>
+<body>
+    <section>
+        <h1>계산기답지 않은 계산기</h1>
+        <div>
+            <input id="num1" placeholder="숫자 1">
+            <input id="num2" placeholder="숫자 2">
+            <select id="operator">
+                <option value="+">+</option>
+                <option value="-">-</option>
+                <option value="*">*</option>
+                <option value="÷">÷</option>
+            </select>
+            <button onclick="cal()">연산 시작(특징: 이름만 거창함)</button>
+            <div id="display-response">결과</div>
+        </div>
+        <script>
+            async function cal() {
+                let num1 = $('#num1').val().trim();
+                let num2 = $('#num2').val().trim();
+                let operator = $('#operator').val();
+
+                if(! num1 || ! num2 || num1 === '' || num2 === ''){
+                    $('#display-response').html('숫자 입력하는 정성 정도는 보여주세요;;');
+                    return;
+                }
+                try {
+                    let response = await $.get('/calculator/' + num1 + "/" + num2 + "/" + operator);
+                    $('#display-response').html(JSON.stringify(response));
+
+                } catch (error) {
+                    $('#display-response').html(JSON.stringify(error));
+                } finally {
+                    $('#display-response').html($('#display-response').html() + '<br>결과가 만족스럽지 않다면 유감');
+                }
+            }
+        </script>
+    </section>
+
+</body>
+</html>
